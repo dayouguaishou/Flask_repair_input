@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>泉西热力有限责任公司抢修录入</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../static/layui/css/layui.css"  media="all">
+  <script src="{{url_for('static', filename='jquery-3.5.1.js')}}"></script><!-- 载入位于static文件夹中的jquery.js文件 -->
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+var connts = '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">录入错误！<br></div>';
+</script>
+<script type=text/javascript>
+</script>
+</head>
+<body>
+
+<ins class="adsbygoogle" style="display:inline-block;width:auto;height:auto" data-ad-client="ca-pub-6111334333458862" data-ad-slot="3820120620"></ins>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top:auto;">
+  <legend>泉西热力有限责任公司抢修录入</legend>
+</fieldset>
+<form class="layui-form layui-form-pane" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">录入手机号</label>
+    <div class="layui-input-block">
+        <input type="tel" name="input_phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属服务站</label>
+    <div class="layui-input-block">
+      <select name="server_sitename" lay-filter="aihao">
+        <option value=""></option>
+        <option value="一矿" selected = "">一矿</option>
+        <option value="二矿">二矿</option>
+        <option value="三矿">三矿</option>
+        <option value="四矿">四矿</option>
+        <option value="五矿">五矿</option>
+        <option value="工程处">工程处</option>
+        <option value="机关">机关</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">事故地点</label>
+    <div class="layui-input-block">
+      <input type="text" name="accident_place" autocomplete="off" lay-verify="required" placeholder="请输入事故地点" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">事故原因</label>
+    <div class="layui-input-block">
+      <input type="text" name="accident_reason" autocomplete="off" lay-verify="required" placeholder="请输入事故原因" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">处理方式</label>
+    <div class="layui-input-block">
+      <textarea name="treatment_method" placeholder="请输入处理方式" lay-verify="required" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">开工时间</label>
+      <div class="layui-input-block">
+        <input type="text" name="start_tm" id="date2" autocomplete="off" class="layui-input">
+      </div>
+    </div></div>
+    <div class="layui-form-item">
+    <div class="layui-inline">
+        <label class="layui-form-label">竣工时间</label>
+        <div class="layui-input-block">
+        <input type="text" name="end_tm" id="date3" autocomplete="off" class="layui-input">
+        </div>
+    </div></div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:50%;">停供时长（小时）</label>
+        <div class="layui-input-block">
+            <input type="text" name="stop_tms" autocomplete="off" style="width:50%;" name="interval" lay-verify="required|number" value="8"  class="layui-input"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:50%;">停供范围面积（万平米）</label>
+        <div class="layui-input-block">
+            <input type="text" name="stop_area" autocomplete="off" style="width:50%;" name="interval" lay-verify="required|number" value="100"  class="layui-input"></div>
+        </div>
+    </div>
+  <div class="layui-form-item"id="layerDemo">
+    <button id="calculate" type="button" data-method="notice" class="layui-btn layui-btn-lg layui-btn-normal " style="margin-left:40%;" lay-submit="" lay-filter="demo2">提交</button>
+  </div>
+
+  <!--div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+    <button id="calculate" type="button" style="margin-left:40%;" data-method="notice" class="layui-btn layui-btn-lg layui-btn-normal">提交</button>
+  </div-->
+
+</form>
+   
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+  $(function () {
+      function submit_form(e) {
+          $.getJSON(
+              $SCRIPT_ROOT + '/repair_input', {
+                input_phone: $('input[name="input_phone"]').val(),
+                server_sitename: $('select[name="server_sitename"]').val(),
+                accident_place: $('input[name="accident_place"]').val(),
+                accident_reason: $('input[name="accident_reason"]').val(),
+                treatment_method: $('textarea[name="treatment_method"]').val(),
+                start_tm: $('input[name="start_tm"]').val(),
+                end_tm: $('input[name="end_tm"]').val(),
+                stop_tms: $('input[name="stop_tms"]').val(),
+                stop_area: $('input[name="stop_area"]').val(),
+                now: new Date().getTime()
+          },
+          function  (data) {
+              $('#result').text(data.result);
+              if(data['result'][0] == 2){
+                connts = '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">你没有录入权限！！<br></div>'; }
+              if(data['result'][0] == 0){
+                connts = '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">录入成功！！' + "<br><br>项目名称：" + data['result'][1] +  "<br><br>录入人姓名：" + data['result'][2] +  "<br><br>录入时间："+data['result'][3] +'<br></div>';}
+              layer.open({
+                  type: 1,
+                  content: connts 
+                });
+          });
+      };
+      // 绑定click事件
+      $('#calculate').bind('click', submit_form);
+  });
+  layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  laydate.render({
+    elem: '#date2'
+    ,type: 'datetime'
+    ,value: new Date(new Date()-(8*3600000))
+    ,theme: '#393D49'
+    ,done: function(value, date, endDate){ 
+  }
+  });
+  laydate.render({
+    elem: '#date3'
+    ,type: 'datetime'
+    ,value: new Date(new Date())
+    ,theme: '#393D49'
+    ,done: function(value, date, endDate){ 
+  }
+  });
+  var editIndex = layedit.build('LAY_demo_editor');
+});
+</script>
+</body>
+</html>
